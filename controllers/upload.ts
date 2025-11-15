@@ -1,38 +1,46 @@
 import { v2 as cloudinary } from "cloudinary";
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
+import { config } from "../config/env";
 
 cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
+  cloud_name: config.cloudinaryCloudName,
+  api_key: config.cloudinaryApiKey,
+  api_secret: config.cloudinaryApiSecret,
 });
 
-export const uploadImage = async (req: Request, res: Response) => {
+export const getUploadSignature = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const { image } = req.body;
+    const timestamp = Math.round(new Date().getTime() / 1000);
 
-    if (!image) {
-      return res.status(400).json({ error: "Image is required" });
-    }
-
-    const result = await cloudinary.uploader.upload(image, {
-      folder: "carhut",
-    });
+    const signature = cloudinary.utils.api_sign_request(
+      {
+        timestamp: timestamp,
+        folder: "uploads",
+      },
+      config.cloudinaryApiSecret
+    );
 
     res.json({
-      url: result.secure_url,
-      publicId: result.public_id,
-      format: result.format,
-      width: result.width,
-      height: result.height,
+      signature,
+      timestamp,
+      cloudName: config.cloudinaryCloudName,
+      apiKey: config.cloudinaryApiKey,
+      folder: "uploads",
     });
   } catch (error) {
-    console.error("Upload error:", error);
-    res.status(500).json({ error: "Failed to upload image" });
+    next(error);
   }
 };
 
-export const deleteImage = async (req: Request, res: Response) => {
+export const deleteImage = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { publicId } = req.body;
 
@@ -41,9 +49,13 @@ export const deleteImage = async (req: Request, res: Response) => {
     }
 
     const result = await cloudinary.uploader.destroy(publicId);
-    res.json({ message: "Image deleted", result });
+
+    res.json({
+      success: true,
+      message: "Image deleted",
+      result,
+    });
   } catch (error) {
-    console.error("Delete error:", error);
-    res.status(500).json({ error: "Failed to delete image" });
+    next(error);
   }
 };

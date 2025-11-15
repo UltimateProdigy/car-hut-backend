@@ -5,6 +5,8 @@ import morgan from "morgan";
 import "./instrument";
 import { Request, Response } from "express";
 import { errorHandler } from "./middleware/errorHandler";
+import { imageRoutes } from "./routes/imageRoutes";
+import { carRoutes } from "./routes/carRoutes";
 
 const app = express();
 
@@ -17,6 +19,9 @@ app.use(express.urlencoded({ extended: true }));
 app.get("/health", (req: Request, res: Response) => {
   res.status(200).json({ status: "OK", timestamp: new Date().toISOString() });
 });
+
+app.use("/v1/image", imageRoutes);
+app.use("/v1/car", carRoutes);
 app.get("/debug-sentry", function mainHandler(req, res) {
   throw new Error("My first Sentry error!");
 });
