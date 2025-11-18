@@ -52,7 +52,7 @@ model User {
   created_at      DateTime   @default(now())
   cars            Car[]
   favorites       Favorite[]
-  
+
   @@map("users")
 }
 
@@ -63,23 +63,23 @@ model Staff {
   profile_picture String?
   role            Role     @default(ADMIN)
   created_at      DateTime @default(now())
-  
+
   @@map("staffs")
 }
 
 model Brand {
-  id    String @id @default(uuid())
-  name  String @unique
-  logo  String?
-  cars  Car[]
+  id   String  @id @default(uuid())
+  name String  @unique
+  logo String?
+  cars Car[]
 
   @@map("brands")
 }
 
 model Category {
-  id    String @id @default(uuid())
-  name  String @unique
-  cars  Car[]
+  id   String @id @default(uuid())
+  name String @unique
+  cars Car[]
 
   @@map("categories")
 }
@@ -106,16 +106,16 @@ model Car {
   is_featured  Boolean       @default(false)
   status       CarStatus     @default(AVAILABLE)
 
-  brandId      String
-  brand        Brand         @relation(fields: [brandId], references: [id], onDelete: Cascade)
+  brand_id String
+  brand    Brand  @relation(fields: [brand_id], references: [id], onDelete: Cascade)
 
-  categoryId   String?
-  category     Category?     @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  category_id String?
+  category    Category? @relation(fields: [category_id], references: [id], onDelete: SetNull)
 
-  userId       String
-  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user_id String
+  user   User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
-  vin          String?       @unique
+  vin          String?    @unique
   licensePlate String?
   features     Feature[]
   favorites    Favorite[]
@@ -124,8 +124,8 @@ model Car {
 }
 
 model Feature {
-  id          String @id @default(uuid())
-  name        String @unique
+  id          String  @id @default(uuid())
+  name        String  @unique
   description String?
   cars        Car[]
 
@@ -133,12 +133,12 @@ model Feature {
 }
 
 model Favorite {
-  id     String @id @default(uuid())
-  userId String
-  carId  String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  car    Car    @relation(fields: [carId], references: [id], onDelete: Cascade)
+  id      String @id @default(uuid())
+  user_id String
+  car_id  String
+  user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  car     Car    @relation(fields: [car_id], references: [id], onDelete: Cascade)
 
-  @@unique([userId, carId])
+  @@unique([user_id, car_id])
   @@map("favorites")
 }

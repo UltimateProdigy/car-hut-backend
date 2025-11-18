@@ -8,7 +8,7 @@ const router = Router();
 router.delete("/", requireRoles([Role.ADMIN]), deleteImage);
 router.post(
   "/get-upload-signature",
-  requireRoles([Role.USER]),
+  requireRoles([Role.USER, Role.ADMIN]),
   getUploadSignature
 );
 
