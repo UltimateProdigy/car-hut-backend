@@ -65,7 +65,12 @@ export const carService = {
       where.auction_start_date = { lte: now };
       where.auction_end_date = { gte: now };
       where.status = "AVAILABLE";
+    } else if (filters?.status) {
+      where.status = filters.status;
     }
+    if (filters?.isActive !== undefined) where.is_active = filters.isActive;
+    if (filters?.isFeatured !== undefined)
+      where.is_featured = filters.isFeatured;
 
     return await prisma.car.findMany({
       where,

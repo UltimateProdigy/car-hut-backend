@@ -30,12 +30,6 @@ export const bidController = {
         data: bid,
       });
     } catch (error: any) {
-      if (error.message) {
-        return res.status(400).json({
-          success: false,
-          message: error.message,
-        });
-      }
       next(error);
     }
   },
@@ -199,12 +193,6 @@ export const bidController = {
           : null,
       });
     } catch (error: any) {
-      if (error.message) {
-        return res.status(400).json({
-          success: false,
-          message: error.message,
-        });
-      }
       next(error);
     }
   },

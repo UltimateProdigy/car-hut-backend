@@ -1,53 +1,53 @@
-import { PrismaClient, Prisma } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
 export const bidService = {
   async placeBid(carId: string, userId: string, amount: number) {
-    const car = await prisma.car.findUnique({
-      where: { id: carId },
-      include: {
-        bids: {
-          orderBy: { amount: "desc" },
-          take: 1,
-        },
-      },
-    });
-
-    if (!car) {
-      throw new Error("Car not found");
-    }
-
-    const now = new Date();
-    if (
-      !car.auction_start_date ||
-      !car.auction_end_date ||
-      now < car.auction_start_date ||
-      now > car.auction_end_date
-    ) {
-      throw new Error("Auction is not active");
-    }
-
-    if (car.status !== "AVAILABLE") {
-      throw new Error("Car is not available for bidding");
-    }
-
-    if (car.user_id === userId) {
-      throw new Error("You cannot bid on your own car");
-    }
-
-    const currentHighestBid = car.bids[0]?.amount || car.price;
-
-    if (amount <= currentHighestBid) {
-      throw new Error(
-        `Bid must be higher than current bid of $${currentHighestBid}`
-      );
-    }
-    if (car.reserve_price && amount < car.reserve_price) {
-      console.log("Bid does not meet reserve price");
-    }
-
     const result = await prisma.$transaction(async (tx) => {
+      const car = await prisma.car.findUnique({
+        where: { id: carId },
+        include: {
+          bids: {
+            orderBy: { amount: "desc" },
+            take: 1,
+          },
+        },
+      });
+
+      if (!car) {
+        throw new Error("Car not found");
+      }
+
+      const now = new Date();
+      if (
+        !car.auction_start_date ||
+        !car.auction_end_date ||
+        now < car.auction_start_date ||
+        now > car.auction_end_date
+      ) {
+        throw new Error("Auction is not active");
+      }
+
+      if (car.status !== "AVAILABLE") {
+        throw new Error("Car is not available for bidding");
+      }
+
+      if (car.user_id === userId) {
+        throw new Error("You cannot bid on your own car");
+      }
+
+      const currentHighestBid = car.bids[0]?.amount || car.price;
+
+      if (amount <= currentHighestBid) {
+        throw new Error(
+          `Bid must be higher than current bid of $${currentHighestBid}`
+        );
+      }
+      if (car.reserve_price && amount < car.reserve_price) {
+        console.log("Bid does not meet reserve price");
+      }
+
       await tx.bid.updateMany({
         where: { car_id: carId },
         data: { is_winning: false },
@@ -204,8 +204,14 @@ export const bidService = {
 
     const totalBids = bids.length;
     const amounts = bids.map((b) => b.amount);
-    const highestBid = amounts.length > 0 ? Math.max(...amounts) : 0;
-    const lowestBid = amounts.length > 0 ? Math.min(...amounts) : 0;
+    const highestBid =
+      amounts.length > 0
+        ? amounts.reduce((max, amt) => Math.max(max, amt), 0)
+        : 0;
+    const lowestBid =
+      amounts.length > 0
+        ? amounts.reduce((min, amt) => Math.min(min, amt), Infinity)
+        : 0;
     const averageBid =
       amounts.length > 0
         ? amounts.reduce((a, b) => a + b, 0) / amounts.length
