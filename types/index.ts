@@ -10,7 +10,24 @@ export interface AuthenticatedRequest extends Request {
     username?: string;
   };
 }
+export interface CreateUserInput {
+  username: string;
+  email?: string;
+  password: string;
+  profile_picture?: string;
+}
 
+export interface LoginInput {
+  username: string;
+  password: string;
+}
+
+export interface UpdateUserInput {
+  username?: string;
+  email?: string;
+  password?: string;
+  profile_picture?: string;
+}
 export interface CreateCarInput {
   name: string;
   model: string;
