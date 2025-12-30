@@ -7,6 +7,7 @@ import { Request, Response } from "express";
 import { errorHandler } from "./middleware/errorHandler";
 import { imageRoutes } from "./routes/imageRoutes";
 import { carRoutes } from "./routes/carRoutes";
+import { bidRoutes } from "./routes/bidRoutes";
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.get("/health", (req: Request, res: Response) => {
 
 app.use("/v1/image", imageRoutes);
 app.use("/v1/car", carRoutes);
+app.use("/v1/bid", bidRoutes)
 app.get("/debug-sentry", function mainHandler(req, res) {
   throw new Error("My first Sentry error!");
 });

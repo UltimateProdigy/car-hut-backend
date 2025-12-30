@@ -1,4 +1,5 @@
 import { Role } from "@prisma/client";
+import { Decimal } from "@prisma/client/runtime/library";
 import { Request } from "express";
 
 export interface AuthenticatedRequest extends Request {
@@ -18,7 +19,7 @@ export interface CreateCarInput {
   description?: string;
   mileage: number;
   image_url?: string;
-  images: string[];
+  images?: string[];
   location?: string;
   fuel_type?: string;
   transmission?: string;
@@ -26,9 +27,17 @@ export interface CreateCarInput {
   horsepower?: number;
   color?: string;
   body_type?: string;
-  brandId: string;
-  categoryId?: string;
-  userId: string;
+  brand_id: string;
+  category_id?: string | null;
+  user_id: string;
   vin?: string;
   licensePlate?: string;
+  is_active?: boolean;
+  is_featured?: boolean;
+  status?: string;
+  auction_start_date?: Date;
+  auction_end_date?: Date;
+  reserve_price?: number;
+  buy_now_price?: number;
+  current_bid?: number;
 }

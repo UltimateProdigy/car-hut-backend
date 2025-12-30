@@ -45,24 +45,29 @@ enum CarStatus {
 
 model User {
   id              String     @id @default(cuid())
-  username        String
+  username        String     @unique
+  email           String?    @unique
   password        String
   profile_picture String?
   role            Role       @default(USER)
   created_at      DateTime   @default(now())
+  updated_at      DateTime   @updatedAt
   cars            Car[]
   favorites       Favorite[]
+  bids            Bid[]
 
   @@map("users")
 }
 
 model Staff {
   id              String   @id @default(cuid())
-  username        String
+  username        String   @unique
+  email           String?  @unique
   password        String
   profile_picture String?
   role            Role     @default(ADMIN)
   created_at      DateTime @default(now())
+  updated_at      DateTime @updatedAt
 
   @@map("staffs")
 }
@@ -90,11 +95,12 @@ model Car {
   description  String?
   model        String
   year         Int
-  price        Float
+  price        Float 
   mileage      Int
   image_url    String?
   images       String[]
   created_at   DateTime      @default(now())
+  updated_at   DateTime      @updatedAt
   location     String?
   fuel_type    FuelType?
   transmission Transmission?
@@ -106,6 +112,12 @@ model Car {
   is_featured  Boolean       @default(false)
   status       CarStatus     @default(AVAILABLE)
 
+  auction_start_date DateTime?
+  auction_end_date   DateTime?
+  reserve_price      Float?
+  current_bid        Float?
+  buy_now_price      Float?
+
   brand_id String
   brand    Brand  @relation(fields: [brand_id], references: [id], onDelete: Cascade)
 
@@ -113,12 +125,13 @@ model Car {
   category    Category? @relation(fields: [category_id], references: [id], onDelete: SetNull)
 
   user_id String
-  user   User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   vin          String?    @unique
   licensePlate String?
   features     Feature[]
   favorites    Favorite[]
+  bids         Bid[]
 
   @@map("cars")
 }
@@ -133,12 +146,30 @@ model Feature {
 }
 
 model Favorite {
-  id      String @id @default(uuid())
-  user_id String
-  car_id  String
-  user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  car     Car    @relation(fields: [car_id], references: [id], onDelete: Cascade)
+  id         String   @id @default(uuid())
+  user_id    String
+  car_id     String
+  created_at DateTime @default(now())
+  user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  car        Car      @relation(fields: [car_id], references: [id], onDelete: Cascade)
 
   @@unique([user_id, car_id])
   @@map("favorites")
+}
+
+model Bid {
+  id         String   @id @default(uuid())
+  amount     Float
+  created_at DateTime @default(now())
+  is_winning Boolean  @default(false)
+
+  car_id String
+  car    Car    @relation(fields: [car_id], references: [id], onDelete: Cascade)
+
+  user_id String
+  user    User   @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([car_id, amount])
+  @@index([car_id, created_at])
+  @@map("bids")
 }
