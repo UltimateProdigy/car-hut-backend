@@ -11,6 +11,7 @@ import { bidRoutes } from "./routes/bidRoutes";
 import { authRoutes } from "./routes/authRoutes";
 import { userRoutes } from "./routes/userRoutes";
 import { staffRoutes } from "./routes/staffRoutes";
+import { cacheRoutes } from "./routes/cacheRoutes";
 
 const app = express();
 
@@ -24,12 +25,13 @@ app.get("/health", (req: Request, res: Response) => {
   res.status(200).json({ status: "OK", timestamp: new Date().toISOString() });
 });
 
-app.use("/v1/image", imageRoutes);
-app.use("/v1/car", carRoutes);
-app.use("/v1/bid", bidRoutes);
+app.use("/v1/images", imageRoutes);
+app.use("/v1/cars", carRoutes);
+app.use("/v1/bids", bidRoutes);
 app.use("/v1/auth", authRoutes);
 app.use("/v1/users", userRoutes);
-app.use("/v1/staff", staffRoutes);
+app.use("/v1/staffs", staffRoutes);
+app.use("/v1/cache", cacheRoutes);
 app.get("/debug-sentry", function mainHandler(req, res) {
   throw new Error("My first Sentry error!");
 });

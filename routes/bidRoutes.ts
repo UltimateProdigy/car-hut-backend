@@ -2,14 +2,19 @@ import { Router } from "express";
 import { bidController } from "../controllers/bidController";
 import { requireRoles } from "../middleware/requireRoles";
 import { Role } from "@prisma/client";
+import { smartCache } from "../middleware/cache-middleware";
 
 const router = Router();
 
-router.get("/car/:carId", bidController.getBidsByCar);
+router.get("/car/:carId", smartCache(), bidController.getBidsByCar);
 
-router.get("/car/:carId/highest", bidController.getHighestBid);
+router.get("/car/:carId/highest", smartCache(), bidController.getHighestBid);
 
-router.get("/car/:carId/statistics", bidController.getBidStatistics);
+router.get(
+  "/car/:carId/statistics",
+  smartCache(),
+  bidController.getBidStatistics
+);
 
 router.post(
   "/car/:carId",
@@ -19,6 +24,7 @@ router.post(
 
 router.get(
   "/my-bids",
+  smartCache(),
   requireRoles([Role.USER, Role.ADMIN]),
   bidController.getMyBids
 );

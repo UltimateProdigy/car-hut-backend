@@ -95,7 +95,6 @@ export const smartCache = (
         console.log(`⚡ Cache HIT: ${cacheKey}`);
         res.status(200).json({
           ...JSON.parse(cached),
-          fromCache: true,
         });
         return;
       }

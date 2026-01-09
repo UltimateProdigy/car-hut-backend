@@ -2,6 +2,7 @@ import { Router } from "express";
 import { carController } from "../controllers/carController";
 import { requireRoles } from "../middleware/requireRoles";
 import { Role } from "@prisma/client";
+import { smartCache } from "../middleware/cache-middleware";
 
 const router = Router();
 
@@ -11,8 +12,8 @@ router.get(
   requireRoles([Role.USER, Role.ADMIN]),
   carController.getMyListings
 );
-router.get("/", carController.getCars);
-router.get("/:id", carController.getCarById);
+router.get("/", smartCache(), carController.getCars);
+router.get("/:id", smartCache(), carController.getCarById);
 router.post(
   "/",
   requireRoles([Role.USER, Role.ADMIN]),
