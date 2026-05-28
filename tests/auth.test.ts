@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import { authController } from "../controllers/authController";
-import { authService } from "../services/authService";
+import { authController } from "../controllers/auth.controller";
+import { authService } from "../services/auth.service";
 
 jest.mock("../services/authService");
 

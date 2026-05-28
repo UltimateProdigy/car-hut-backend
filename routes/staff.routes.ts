@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { staffController } from "../controllers/staffController";
+import { staffController } from "../controllers/staff.controller";
 import { requireRoles } from "../middleware/requireRoles";
 import { Role } from "@prisma/client";
 import { smartCache } from "../middleware/cache-middleware";

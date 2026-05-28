@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { authController } from "../controllers/authController";
+import { authController } from "../controllers/auth.controller";
 import { requireRoles } from "../middleware/requireRoles";
 import { Role } from "@prisma/client";
 import { redisRateLimiter } from "../middleware/rate-limiter";

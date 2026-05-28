@@ -1,0 +1,22 @@
+{
+	"folders": [
+		{
+			"path": "../../car-hut"
+		},
+		{
+			"path": ".."
+		},
+		{
+			"path": "../../../OWANBE/Owambe"
+		},
+		{
+			"path": "../../../jays-restaurant"
+		},
+		{
+			"path": "../../../hubcommercefront"
+		}
+	],
+	"settings": {
+		"prisma.pinToPrisma6": true
+	}
+}

@@ -4,7 +4,6 @@ import jwt from "jsonwebtoken";
 import { CreateUserInput, LoginInput } from "../types";
 import { config } from "../config/env";
 import { generateToken } from "../utils/jwt";
-import { staffService } from "./staffService";
 
 const prisma = new PrismaClient();
 

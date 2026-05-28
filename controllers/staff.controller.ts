@@ -1,5 +1,5 @@
 import { NextFunction, Response } from "express";
-import { staffService } from "../services/staffService";
+import { staffService } from "../services/staff.service";
 import { AuthenticatedRequest, UpdateUserInput } from "../types";
 
 export const staffController = {

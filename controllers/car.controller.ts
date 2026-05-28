@@ -1,5 +1,5 @@
 import { NextFunction, Response } from "express";
-import { carService } from "../services/carService";
+import { carService } from "../services/car.service";
 import { AuthenticatedRequest, CreateCarInput } from "../types";
 
 export const carController = {

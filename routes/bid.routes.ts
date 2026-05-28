@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { bidController } from "../controllers/bidController";
+import { bidController } from "../controllers/bid.controller";
 import { requireRoles } from "../middleware/requireRoles";
 import { Role } from "@prisma/client";
 import { smartCache } from "../middleware/cache-middleware";

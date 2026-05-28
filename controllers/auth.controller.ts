@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { authService } from "../services/authService";
+import { authService } from "../services/auth.service";
 import { AuthenticatedRequest, CreateUserInput, LoginInput } from "../types";
 
 export const authController = {

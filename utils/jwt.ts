@@ -15,6 +15,7 @@ export const generateToken = (payload: object): string => {
   const expirationTime = validateExpirationTime(config.jwtExpiresIn);
 
   const options: SignOptions = {
+    algorithm: "HS256",
     expiresIn: expirationTime,
     issuer: "carhut-backend",
     audience: "carhut-users",
@@ -26,6 +27,7 @@ export const generateToken = (payload: object): string => {
 export const verifyToken = (token: string) => {
   try {
     return jwt.verify(token, config.jwtSecret, {
+      algorithms: ["HS256"],
       issuer: "carhut-backend",
       audience: "carhut-users",
     });

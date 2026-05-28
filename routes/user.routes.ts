@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { userController } from "../controllers/userController";
+import { userController } from "../controllers/user.controller";
 import { requireRoles } from "../middleware/requireRoles";
 import { Role } from "@prisma/client";
 

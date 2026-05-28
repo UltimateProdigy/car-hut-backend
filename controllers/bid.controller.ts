@@ -1,5 +1,5 @@
 import { NextFunction, Response } from "express";
-import { bidService } from "../services/bidService";
+import { bidService } from "../services/bid.service";
 import { AuthenticatedRequest } from "../types";
 
 export const bidController = {
